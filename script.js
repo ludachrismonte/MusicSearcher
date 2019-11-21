@@ -18,7 +18,7 @@ var app = new Vue({
   	search: function() {
       app.reset();
       axios
-        .get('https://itunes.apple.com/search?origin=*&term=' + this.query)
+        .get('https://itunes.apple.com/search?term=' + this.query)
         .then(function (response) {
         	console.log(response);
           app.results = response.data.results;
@@ -78,7 +78,7 @@ var app = new Vue({
       newboi.loading = true;
       app.$set(app.results, id, newboi);
       axios
-        .get('https://en.wikipedia.org/w/api.php?action=opensearch&origin=*&search=' + app.results[id].artistName)
+        .get('https://en.wikipedia.org/w/api.php?action=opensearch&search=' + app.results[id].artistName)
         .then(function (response) {
           console.log(response);
           var newboi = app.results[id];
