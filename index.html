@@ -11,89 +11,95 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
       </title>
    </head>
-   <style>
+  <style>
 
-      h5{
-      padding-bottom: 5px;
-      padding-top: 3px;
-      }
-      .genre{
-      border:solid 2px;
-      border-radius: 3px;
-      margin:5px;
-      white-space: nowrap;
-      background-color:#ccc;
-      padding:2px;
-      }
-      /*img {
-      height: 200px;
-      }*/
-   </style>
-   <body >
-     <div id='app'>
+    h5{
+    padding-bottom: 5px;
+    padding-top: 3px;
+    }
+    .genre{
+    border:solid 2px;
+    border-radius: 3px;
+    margin:5px;
+    white-space: nowrap;
+    background-color:#ccc;
+    padding:2px;
+    }
+    /*img {
+    height: 200px;
+    }*/
+  </style>
+  <body>
+    <div id='app'>
       <nav class="navbar navbar-default">
-         <div class="container">
-            <div class="navbar-header">
-               <h3>493 Artist Search</h3>
-            </div>
-         </div>
+        <div class="container">
+          <div class="navbar-header">
+            <h3>493 Artist Search</h3>
+          </div>
+        </div>
       </nav>
+
       <div class = "container">
-         <div class = "row searchbar" >
-            <div class = "col-lg-12 col-md-12 col-sm-12">
-               <h4>Enter the name of the artist and enter : </h4>
-               <input v-model="query" v-on:keyup.enter="search" type="text">
+        <div class = "row searchbar" >
+          <div class = "col-lg-12 col-md-12 col-sm-12">
+             <h4>Enter the name of the artist and enter : </h4>
+             <input v-model="query" v-on:keyup.enter="search" type="text">
+          </div>
+        </div>
+
+        <div class = "col-lg-12 col-md-12 col-sm-12">
+          <div>
+            <button class = "btn btn-success" style="margin:2px;">ALL</button>
+            <template v-for="item in genres">
+              <button v-if="selectedGenres.includes(item)" type="button" v-on:click="toggleGenre(item)" class="btn btn-primary" style="margin:2px;">{{ item }}</button>
+              <button v-if="!selectedGenres.includes(item)" type="button" v-on:click="toggleGenre(item)" class="btn btn-default" style="margin:2px;">{{ item }}</button>
+            </template>
+          </div>
+          <h4>
+            Search Result (Total {{ results.length }} found)
+            <br><br>
+            List of results
+          </h4>
+        </div>
+
+        <iframe width="0" height="0" v-bind:src="playURL" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+        <div>
+          <template v-for="item in results">
+            <div v-if="selectedGenres.length === 0 || selectedGenres.includes(item.primaryGenreName)" class="col-lg-6 col-md-6 col-sm-6" style='margin-bottom: 50px; display: inline; height: 250px'>
+              <div style="height: 300px">
+                <div class="col-sm-4" style='max-width:200px; margin-right: 30px'>
+                  <img style='width: 120%; display: inline;' v-bind:src="item.artworkUrl100" v-on:click="playSong(item.id)">
+                </div>
+                <div class="col-sm-6" style='max-height: 250px;'>
+                  <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" v-on:click="toggleDescription(item.id, true)">Description</a></li>
+                    <li><a data-toggle="tab" v-on:click="toggleDescription(item.id, false)">Artist Info</a></li>
+                  </ul>
+                  <div class="tab-content">
+                    <div v-if="item.descriptionActive">
+                      <b>Artist Name:</b> {{ item.artistName }}<br>
+                      <b>Track Name:</b> {{ item.trackName }}<br>
+                      <b>Collection Name:</b> {{ item.collectionName }}<br>
+                      <b>Price:</b> {{ item.trackPrice }}<br>
+                      <b>Type:</b> {{ item.kind }}<br>
+                      <b>Preview:</b> <a v-bind:href="item.previewUrl">link</a>
+                    </div>
+                    <div v-if="!item.descriptionActive">
+                      <img v-if="item.loading" style='width: 35%; display: inline;' src="./loading.gif">
+                      {{ item.artistInfo }}
+                    </div>
+                  </div>
+                </div>
+              </div>         
             </div>
-         </div>
+          </template>
+        </div>
 
-         <div class = "col-lg-12 col-md-12 col-sm-12">
-
-           <div>
-              <button class = "btn btn-success" style="margin:2px;">ALL</button>
-           </div>
-           <h4>
-              Search Result (Total {{ results.length }} found)
-              <br><br>
-              List of results
-           </h4>
-         </div>
-
-       <div>
-         <div class = "col-lg-6 col-md-6 col-sm-6" style='margin-bottom: 50px; display: inline; height: 250px' >
-           <div class="col-sm-4" style='max-width:200px;margin-right: 30px'>
-             <img style='width: 120%; display: inline; ' v-bind:src="artist1">
-          </div>
-
-          <div class="col-sm-6" style='max-height: 250px;'>
-             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" >Tab1</a></li>
-                <li><a data-toggle="tab">Tab2</a></li>
-             </ul>
-             <div class="tab-content">
-             </div>
-           </div>
-
-         </div>
-
-         <div class = "col-lg-6 col-md-6 col-sm-6" style='margin-bottom: 50px; display: inline; height: 250px' >
-           <div class="col-sm-4" style='max-width:200px;margin-right: 30px'>
-             <img style='width: 120%; display: inline; ' v-bind:src="artist2">
-          </div>
-
-          <div class="col-sm-6" style='max-height: 250px;'>
-             <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" >Tab1</a></li>
-                <li><a data-toggle="tab">Tab2</a></li>
-             </ul>
-             <div class="tab-content">
-             </div>
-           </div>
-
-         </div>
       </div>
     </div>
-  </div>
+
     <script src="script.js"></script>
 
-   </body>
+  </body>
 </html>
