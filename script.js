@@ -94,7 +94,7 @@ var app = new Vue({
     },
     playSong: function(id) {
       axios
-        .get("https://cors-anywhere.herokuapp.com/https://www.google.com/search?origin=*&q=youtube " + app.results[id].artistName + " " + app.results[id].trackName + " audio")
+        .get("https://cors-anywhere.herokuapp.com/https://www.google.com/search?origin=*&q=youtube " + app.results[id].artistName.replace(/&/g, "%26") + " " + app.results[id].trackName.replace(/&/g, "%26") + " audio")
         .then(function (response) {
           var pattern = /href="https:\/\/www.youtube.com\/watch\?v=(.*?)[/&"]/;
           var result = pattern.exec(response.data)[1];
