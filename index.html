@@ -69,7 +69,7 @@
             <div v-if="selectedGenres.length === 0 || selectedGenres.includes(item.primaryGenreName)" class="col-lg-6 col-md-6 col-sm-6" style='margin-bottom: 50px; display: inline; height: 250px'>
               <div style="height: 300px">
                 <div class="col-sm-4" style='max-width:200px; margin-right: 30px'>
-                  <img style='width: 120%; display: inline;' v-bind:src="item.artworkUrl100" v-on:click="playSong(item.id)">
+                  <img style='width: 120%; display: inline; cursor: pointer' v-bind:src="item.artworkUrl100" v-on:click="playSong(item.id)">
                 </div>
                 <div class="col-sm-6" style='max-height: 250px;'>
                   <ul class="nav nav-tabs">
