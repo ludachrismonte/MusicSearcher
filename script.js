@@ -18,7 +18,7 @@ var app = new Vue({
   	search: function() {
       app.reset();
       axios
-        .get('https://itunes.apple.com/search?origin=*&term=' + this.query)
+        .get('https://itunes.apple.com/search?term=' + this.query)
         .then(function (response) {
         	console.log(response);
           app.results = response.data.results;
