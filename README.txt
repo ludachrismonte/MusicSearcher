@@ -1,0 +1,5 @@
+I added a feature that allows you to play any song in full, without ads or having to leave the page. If a user clicks on the album art for a search result, a request is made for "https://www.google.com/search?q=youtube+<artist>+<track>+audio". This returns the html page for the google results, and I uses regex to parse out the first youtube video id. *Most* of the time, the first result is a video that contains the song's audiofile. I use this video ID to embed the video into a hidden iframe that plays the song as soon as it is loaded.
+
+Sometimes YouTube blocks embedded content from working on locally run webpages, so I hosted my site at https://ludachrismonte.github.io/MusicSearcher/ where this should work as explained. 
+
+To make the feature more usable, I added the trackname to each of the search results so you know what you're playing when you click on a song.
